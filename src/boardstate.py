@@ -271,9 +271,72 @@ class BoardState:
             board[0, i + 1] = -1
             board[1, i] = -1
             board[2, i + 1] = -1
-        #board[7, 0] = 1  # шашка первого игрока
-        #board[6, 1] = 2  # дамка первого игрока
-        #board[0, 1] = -1  # шашка противника
-        #board[0, 3] = -2
+
 
         return BoardState(board, 1)
+
+def checking_move(board, new_board, player_):
+    moves = board.get_possible_moves()
+    if new_board is not None:
+        k = False  # валидный ход
+        for i in range(len(moves)):
+            comp = True
+            for x in range(8):
+                for y in range(8):
+                    if new_board.board[x, y] != moves[i].board[x, y]:
+                        comp = False
+            if comp:
+                k = True
+                break
+        eat_moves = board.get_possible_eat()
+        l = False  # скушал
+        for i in range(len(eat_moves)):
+            comp = True
+            for x in range(8):
+                for y in range(8):
+                    if new_board.board[x, y] != eat_moves[i].board[x, y]:
+                        comp = False
+            if comp:
+                l = True
+                break
+        if k:
+            if len(eat_moves) != 0 and l:
+                board = new_board
+                if len(new_board.get_possible_eat()) == 0:
+                    board.change_player()
+            elif not l and len(eat_moves) == 0:
+                board = new_board
+                board.change_player()
+        if board.is_game_finished:
+            if board.get_winner == player_:
+                print("Win")
+            else:
+                print("Lose")
+            return
+
+
+def checking_move_ai(board, new_board, player_):
+    eat_moves = board.get_possible_eat()
+    l = False  ## скушал
+    for i in range(len(eat_moves)):
+        comp = True
+        for x in range(8):
+            for y in range(8):
+                if new_board.board[x, y] != eat_moves[i].board[x, y]:
+                    comp = False
+        if comp:
+            l = True
+            break
+    if len(eat_moves) != 0 and l:
+        board = new_board
+        if len(new_board.get_possible_eat()) == 0:
+            board.change_player()
+    elif not l and len(eat_moves) == 0:
+        board = new_board
+        board.change_player()
+    if board.is_game_finished:
+        if board.get_winner == player_:
+            print("Win")
+        else:
+            print("Lose")
+        return
