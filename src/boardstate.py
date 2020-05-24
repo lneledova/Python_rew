@@ -1,5 +1,9 @@
+from itertools import product
+
 import numpy as np
 from typing import Optional, List
+
+
 
 
 class BoardState:
@@ -94,26 +98,13 @@ class BoardState:
         res = None
         for i in range(0, 8):
             for j in range(0, 8):
-                if self.board[i, j] == self.current_player: ## ест пешка
-                    if j < 6 and i < 6:
-                        res = self.do_move(j, i, j + 2, i + 2)
-                    if res is not None:
-                        eat_moves.append(res)
-                        res = None
-                    if j > 1 and i < 6:
-                        res = self.do_move(j, i, j - 2, i + 2)
-                    if res is not None:
-                        eat_moves.append(res)
-                        res = None
-                    if j < 6 and i > 1:
-                        res = self.do_move(j, i, j + 2, i - 2)
-                    if res is not None:
-                        eat_moves.append(res)
-                    if j > 1 and i > 1:
-                        res = self.do_move(j, i, j - 2, i - 2)
-                    if res is not None:
-                        eat_moves.append(res)
-                        res = None
+                if self.board[i, j] == self.current_player:
+                    for dx, dy in product((-2, 2), (-2, 2)): ## ест пешка
+                        if 0 <= i + dx < 8 and 0 <= j + dy < 8:
+                            res = self.do_move(i + dx, j + dy)
+                            if res is not None:
+                                eat_moves.append(res)
+                                res = None
                 if  abs(self.board[i, j]) == 2 and self.board[i, j] / 2 == self.current_player:
                     for to_x in range(j + 2, 8):
                         for to_y in range(i + 2, 8):
@@ -274,6 +265,7 @@ class BoardState:
 
 
         return BoardState(board, 1)
+
 
 def checking_move(board, new_board, player_):
     moves = board.get_possible_moves()

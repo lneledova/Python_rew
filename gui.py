@@ -63,7 +63,7 @@ def game_loop(screen: Surface, board: BoardState, ai: AI):
 
                 new_board = board.do_move(old_x, old_y, new_x, new_y)
 
-                checking_move(board, new_board, player_);
+                checking_move(board, new_board, player_)
 
 
             if event.type == pygame.MOUSEBUTTONUP and event.button == 3:
@@ -76,7 +76,7 @@ def game_loop(screen: Surface, board: BoardState, ai: AI):
 
                 if event.key == pygame.K_SPACE and board.current_player == ai_:
                     new_board = ai.next_move(board)
-                    checking_move_ai(board, new_board, player_);
+                    checking_move_ai(board, new_board, player_)
 
 
 
