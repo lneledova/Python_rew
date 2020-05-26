@@ -162,48 +162,26 @@ class BoardState:
         for i in range(0, 8):
             for j in range(0, 8):
                 if self.board[i, j] == self.current_player and self.board[i, j] == -1: ## возможные ходы для черной
-                    if j != 7 and i != 7:
-                        res = self.do_move(j, i, j + 1, i + 1)
-                    if res is not None:
-                        moves.append(res)
-                        res = None
-                    if j != 0 and i != 7:
-                        res = self.do_move(j, i, j - 1, i + 1)
-                    if res is not None:
-                        moves.append(res)
-                        res = None
+                    for dj in (-1, 1):
+                        if i < 8 and 0 < j + dj < 8:
+                            res = self.do_move(j, i, j + dj, i + 1)
+                            if res is not None:
+                                moves.append(res)
+                                res = None
                 if self.board[i, j] == 1 and self.current_player == 1: ## белая пешка
-                    if j != 7 and i != 0:
-                        res = self.do_move(j, i, j + 1, i - 1)
-                    if res is not None:
-                        moves.append(res)
-                        res = None
-                    if j != 0 and i != 0:
-                        res = self.do_move(j, i, j - 1, i - 1)
-                    if res is not None:
-                        moves.append(res)
-                        res = None
+                    for dj in (-1, 1):
+                        if i > 0 and 0 < j + dj < 8:
+                            res = self.do_move(j, i, j + dj, i - 1)
+                            if res is not None:
+                                moves.append(res)
+                                res = None
                 if self.board[i, j] == self.current_player: ## ест пешка
-                    if j < 6 and i < 6:
-                        res = self.do_move(j, i, j + 2, i + 2)
-                    if res is not None:
-                        moves.append(res)
-                        res = None
-                    if j > 1 and i < 6:
-                        res = self.do_move(j, i, j - 2, i + 2)
-                    if res is not None:
-                        moves.append(res)
-                        res = None
-                    if j < 6 and i > 1:
-                        res = self.do_move(j, i, j + 2, i - 2)
-                    if res is not None:
-                        moves.append(res)
-                        res = None
-                    if j > 1 and i > 1:
-                        res = self.do_move(j, i, j - 2, i - 2)
-                    if res is not None:
-                        moves.append(res)
-                        res = None
+                    for di, dj in product((-2, 2), (-2, 2)):
+                        if 0 <= i + di < 9 and 0 <= j + dj < 9:
+                            res = self.do_move(j, i, j + dj, i + di)
+                            if res is not None:
+                                moves.append(res)
+                                res = None
                 if self.board[i, j] == 2 and self.current_player == 1: ## дамкa белая
                     for k in range(-i, 8 - i):
                         if j + k < 8 and j + k > -1:
